@@ -1,0 +1,57 @@
+        $file /tmp/test/test00/testDerived/example.dat
+        $keyfield id
+
+id		i6      1       ID number
+
+cd		i2	7	check digit for id
+
+racebld		i1      9       Ancestry
+					$label 1. White;\
+					2. European;\
+					3. Asian;\
+					4. Other race
+
+yobenr		i02	10	Year of enrollment (last two digits)
+
+smokebld	i1	12	Smoking Status 2025 Qx
+					$label 1.Never;\
+					2.Past;\
+					3.No, unknown past history;\
+					4.Current;\
+					5.Passthru
+
+mnthbld		i4	13	Date enrolled in months since 1900
+
+timebld		i2	17	Hour of the day of enrollment
+				(Left blank for missing)
+					$label 00. 12:00 a.m. - 1:59 a.m.;\
+					01. 2:00 a.m. - 3:59 a.m.;\
+					02. 4:00 a.m. - 5:59 a.m.;\
+					03. 6:00 a.m. - 7:59 a.m.;\
+					04. 8:00 a.m. - 9:59 a.m.;\
+					05. 10:00 a.m. - 11:59 a.m.;\
+					06. 12:00 p.m. - 1:59 p.m.;\
+					07. 2:00 p.m. - 3:59 p.m.;\
+					08. 4:00 p.m. - 5:59 p.m.;\
+					09. 6:00 p.m. - 7:59 p.m.;\
+					10. 8:00 p.m. - 9:59 p.m.;\
+					11. 10:00 p.m. - 11:59 p.m.
+
+fastbld		i1	19	Enrolled in person
+					$label 1. Yes;\
+					2. No or missing
+
+prob4bld	i1	20	Enrollment problem 4: Tired
+					$label 1. Tired
+
+prob5bld	i1	21	Enrollment problem 5: Unaccompanied
+					$label 1. Unaccompanied
+
+prob9bld	i1	22	Enrollment problem 9: Friday
+					$label 1. Friday
+
+prob10bld	i1	23	Enrollment problem 10: Left Early
+					$label 1. Left Early
+
+prob18bld	i1	24	Enrollment problem 18: Not Used
+					$label 1. Not Used
