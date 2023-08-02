@@ -55,16 +55,16 @@ read_fwf_dd <- function(path, skip = 0) {
     )
   # strip the "i" from column widths
   var_names <- var_names %>%
-    dplyr::mutate(var_width = as.integer(gsub("i", "", var_width)))
+    dplyr::mutate(var_width = as.integer(gsub("i", "", .data$var_width)))
 
   # identify which rows start chunks of variable labels
   label_ind <- dd_lines %>%
-    grepl("$label", ., fixed = TRUE) %>%
+    grepl("$label", .data, fixed = TRUE) %>%
     which()
   # identify the chunks of variable labels
   label_chunks <- label_ind %>%
     vapply(
-      function(x) index_rows[first(which(index_rows > x))]-2,
+      function(x) index_rows[dplyr::first(which(index_rows > x))]-2,
       1
     )
   # NAs occur if a label is the last row of the dictionary
