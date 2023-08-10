@@ -58,16 +58,21 @@ read_fwf_dd <- function(path, skip = 0) {
     dplyr::mutate(var_width = as.integer(gsub("i", "", .data$var_width)))
 
   # identify which rows start chunks of variable labels
-  label_ind <- dd_lines %>%
-    grepl("$label", .data, fixed = TRUE) %>%
-    which()
-  # identify the chunks of variable labels
-  label_chunks <- label_ind %>%
-    vapply(
-      function(x) index_rows[dplyr::first(which(index_rows > x))]-2,
-      1
-    )
-  # NAs occur if a label is the last row of the dictionary
-  label_chunks[is.na(label_chunks)] <- length(dd_lines)
-  dd_lines[label_chunks]
+  label_ind <- which(grepl("$label", dd_lines, fixed = TRUE))
+  # find the variable that each label corresponds to, along with chunk locations
+  var_labels <- dplyr::tibble(
+    var_name = character(length = length(label_ind)),
+    label_start = integer(length(label_ind)),
+    label_end = integer(length(label_ind))
+  )
+  for (i in 1:length(label_ind)) {
+    var_labels$var_name[i] <- var_names$var_name[sum(index_rows <= label_ind[i])]
+    var_labels$label_start[i] <- label_ind[i]
+    if (i < length(label_ind)) {
+      var_labels$label_end[i] <- min(index_rows[index_rows >= label_ind[i]]) - 2
+    } else{
+      var_labels$label_end[i] <- length(dd_lines)
+    }
+  }
+
 }
