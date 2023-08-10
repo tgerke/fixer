@@ -75,4 +75,5 @@ read_fwf_dd <- function(path, skip = 0) {
     }
   }
 
+  list(dd_lines = dd_lines, var_names = var_names, var_labels = var_labels)
 }
