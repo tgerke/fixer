@@ -30,13 +30,13 @@ devtools::install_github("tgerke/fixer")
 
 ## UNDER DEVELOPMENT
 
-Currently launching into the primary function as so:
-
-```{r example, eval=FALSE}
+```{r example, message = FALSE}
 library(fixer)
 
-debugonce("read_fwf_dd")
-
-fwiffer:::read_fwf_example("example-fwf-dictionary.dd") |> 
+dd <- fwiffer:::read_fwf_example("example-fwf-dictionary.dd") |> 
   read_fwf_dd(skip = 2)
+
+dd
+
+dplyr::glimpse(dd)
 ```
