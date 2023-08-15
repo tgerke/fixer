@@ -25,7 +25,7 @@ devtools::install_github("tgerke/fixer")
 library(fixer)
 
 dd <- fwiffer:::read_fwf_example("example-fwf-dictionary.dd") |> 
-  read_fwf_dd(skip = 2)
+  read_dd(skip = 2)
 
 dd
 #> # A tibble: 13 × 8
