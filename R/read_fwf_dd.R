@@ -50,30 +50,36 @@ read_fwf_dd <- function(path, skip = 0) {
     vapply(function(x) gsub("		", "\t", x), "a", USE.NAMES = FALSE) %>%
     paste(collapse = "\n") %>%
     readr::read_delim(
-      col_names = c("var_name", "var_width", "var_colstart", "var_label"),
+      col_names = c("var_name", "col_width", "col_start", "var_label"),
       delim = "\t"
     )
-  # strip the "i" from column widths
+  # strip the "i" from column widths and add row index
   var_names <- var_names %>%
-    dplyr::mutate(var_width = as.integer(gsub("i", "", .data$var_width)))
+    dplyr::mutate(col_width = as.integer(gsub("i", "", .data$col_width))) %>%
+    dplyr::mutate(var_row = index_rows, .after = var_name)
 
-  # identify which rows start chunks of variable labels
+  # identify which rows start chunks of factor labels
   label_ind <- which(grepl("$label", dd_lines, fixed = TRUE))
   # find the variable that each label corresponds to, along with chunk locations
-  var_labels <- dplyr::tibble(
+  factor_labels <- dplyr::tibble(
     var_name = character(length = length(label_ind)),
-    label_start = integer(length(label_ind)),
-    label_end = integer(length(label_ind))
+    fct_label_start_row = integer(length(label_ind)),
+    fct_label_end_row = integer(length(label_ind))
   )
+
   for (i in 1:length(label_ind)) {
-    var_labels$var_name[i] <- var_names$var_name[sum(index_rows <= label_ind[i])]
-    var_labels$label_start[i] <- label_ind[i]
+    factor_labels$var_name[i] <- var_names$var_name[sum(index_rows <= label_ind[i])]
+    factor_labels$fct_label_start_row[i] <- label_ind[i]
     if (i < length(label_ind)) {
-      var_labels$label_end[i] <- min(index_rows[index_rows >= label_ind[i]]) - 2
+      factor_labels$fct_label_end_row[i] <- min(index_rows[index_rows >= label_ind[i]]) - 2
     } else{
-      var_labels$label_end[i] <- length(dd_lines)
+      factor_labels$fct_label_end_row[i] <- length(dd_lines)
     }
   }
 
-  list(dd_lines = dd_lines, var_names = var_names, var_labels = var_labels)
+  var_specs <- dplyr::left_join(
+    var_names, factor_labels, by = "var_name"
+  )
+
+  list(dd_lines = dd_lines, var_specs = var_specs)
 }
