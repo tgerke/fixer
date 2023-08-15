@@ -64,7 +64,8 @@ read_fwf_dd <- function(path, skip = 0) {
   factor_labels <- dplyr::tibble(
     var_name = character(length = length(label_ind)),
     fct_label_start_row = integer(length(label_ind)),
-    fct_label_end_row = integer(length(label_ind))
+    fct_label_end_row = integer(length(label_ind)),
+    fct_labels = vector("list", length(label_ind))
   )
 
   for (i in 1:length(label_ind)) {
@@ -75,11 +76,19 @@ read_fwf_dd <- function(path, skip = 0) {
     } else{
       factor_labels$fct_label_end_row[i] <- length(dd_lines)
     }
+
+    label_vec <-
+      dd_lines[factor_labels$fct_label_start_row[i]:factor_labels$fct_label_end_row[i]]
+    factor_labels$fct_labels[i] <- label_vec %>%
+      gsub("\t", "", .) %>%
+      gsub("$label ", "", ., fixed = TRUE) %>%
+      gsub(";\\", "", ., fixed = TRUE) %>%
+      dplyr::tibble()
   }
 
   var_specs <- dplyr::left_join(
     var_names, factor_labels, by = "var_name"
   )
 
-  list(dd_lines = dd_lines, var_specs = var_specs)
+  return(var_specs)
 }
