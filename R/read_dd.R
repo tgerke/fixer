@@ -29,8 +29,8 @@ read_fwf_example <- function(path = NULL) {
 #'
 #' @examples
 #' fixer:::read_fwf_example("example-fwf-dictionary.dd") |>
-#'   read_fwf_dd(skip = 2)
-read_fwf_dd <- function(path, skip = 0) {
+#'   read_dd(skip = 2)
+read_dd <- function(path, skip = 0) {
 
   # check that the supplied path points to a valid file
   stopifnot(
