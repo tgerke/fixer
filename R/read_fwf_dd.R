@@ -16,4 +16,9 @@ read_fwf_dd <- function(path_fwf, dd) {
     file = path_fwf,
     col_positions = readr::fwf_widths(dd$col_width, dd$var_name)
   )
+
+  out <- fwf %>%
+    labelled::set_variable_labels(.labels = dd$var_label)
+
+  return(out)
 }

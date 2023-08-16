@@ -36,7 +36,8 @@ library(fixer)
 dd <- fwiffer:::read_fwf_example("example-fwf-dictionary.dd") |> 
   read_dd(skip = 2)
 
-dd
+fwf_data <- fixer:::read_fwf_example("example-fwf-data.dat") |>
+  read_fwf_dd(dd)
 
-dplyr::glimpse(dd)
+str(fwf_data)
 ```
