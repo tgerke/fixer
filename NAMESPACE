@@ -2,6 +2,7 @@
 
 export("%>%")
 export(read_dd)
+export(read_fwf_dd)
 importFrom(magrittr,"%>%")
 importFrom(rlang,"%||%")
 importFrom(rlang,.data)
