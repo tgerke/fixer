@@ -2,6 +2,7 @@
 #'
 #' @param path_fwf Path to the fixed-width file
 #' @param dd A data dictionary object, typically defined by read_dd()
+#' @param unlabel Logical, when TRUE factor codes are replaced with the labels
 #'
 #' @return A tibble
 #' @export
@@ -11,7 +12,7 @@
 #'   read_dd(skip = 2)
 #' fixer:::read_fwf_example("example-fwf-data.dat") |>
 #'   read_fwf_dd(dd)
-read_fwf_dd <- function(path_fwf, dd) {
+read_fwf_dd <- function(path_fwf, dd, unlabel = TRUE) {
 
   fwf <- readr::read_fwf(
     file = path_fwf,
@@ -30,13 +31,18 @@ read_fwf_dd <- function(path_fwf, dd) {
 
   assign_fct_labels(labelled_factors[4], out, dd)
 
-  purrr::map_df(labelled_factors, \(x) assign_fct_labels(x, out, dd))
+  out <- purrr::map_df(labelled_factors, \(x) assign_fct_labels(x, out, dd))
 
+  if (unlabel) {
+    out <- out %>% labelled::unlabelled()
+  }
+
+  return(out)
 }
 
 #' An internal function to assign dictionary labels to factors
 #'
-#' @param fct_var The variable to which factor levels will be assigned
+#' @param fct_var Variable as string to which factor levels will be assigned
 #' @param data The data frame containing fct_var
 #' @param dd A data dictionary object, typically defined by read_dd()
 #'

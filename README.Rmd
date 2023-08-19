@@ -28,7 +28,7 @@ You can install the development version of fixer like so:
 devtools::install_github("tgerke/fixer")
 ```
 
-## UNDER DEVELOPMENT
+## Read a fixed width file according to its data dictionary 
 
 ```{r example, message = FALSE}
 library(fixer)
@@ -39,5 +39,15 @@ dd <- fwiffer:::read_fwf_example("example-fwf-dictionary.dd") |>
 fwf_data <- fixer:::read_fwf_example("example-fwf-data.dat") |>
   read_fwf_dd(dd)
 
-str(fwf_data)
+fwf_data
+```
+
+Note that variable labels are retained as well:
+
+```{r show-labels}
+library(gtsummary)
+
+fwf_data %>%
+  select(racebld, smokebld, fastbld) %>%
+  tbl_summary()
 ```

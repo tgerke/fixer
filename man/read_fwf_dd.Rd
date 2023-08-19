@@ -4,12 +4,14 @@
 \alias{read_fwf_dd}
 \title{Read a fixed-width file when given a dictionary}
 \usage{
-read_fwf_dd(path_fwf, dd)
+read_fwf_dd(path_fwf, dd, unlabel = TRUE)
 }
 \arguments{
 \item{path_fwf}{Path to the fixed-width file}
 
 \item{dd}{A data dictionary object, typically defined by read_dd()}
+
+\item{unlabel}{Logical, when TRUE factor codes are replaced with the labels}
 }
 \value{
 A tibble
