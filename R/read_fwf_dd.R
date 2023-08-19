@@ -25,22 +25,39 @@ read_fwf_dd <- function(path_fwf, dd) {
   # set factor labels when relevant
 
   # this base R filter is needed because dplyr::filter doesn't like list cols
-  labelled_factors <- dd[vapply(dd$fct_labels, function(x) !is.null(x), TRUE),]
+  labelled_factors <- dd[vapply(dd$fct_labels, function(x) !is.null(x), TRUE), "var_name"] %>%
+    dplyr::pull()
 
-  # make a named vector for each factor and its labels
-  vec_names <- labelled_factors[1, "fct_labels"] %>%
-    unlist() %>%
-    purrr::map_chr(~ strsplit(.x, ". ", fixed = TRUE)[[1]][2])
+  assign_fct_labels(labelled_factors[4], out, dd)
 
-  fct_labels <- labelled_factors[1, "fct_labels"] %>%
+  purrr::map_df(labelled_factors, \(x) assign_fct_labels(x, out, dd))
+
+}
+
+#' An internal function to assign dictionary labels to factors
+#'
+#' @param fct_var The variable to which factor levels will be assigned
+#' @param data The data frame containing fct_var
+#' @param dd A data dictionary object, typically defined by read_dd()
+#'
+#' @return A updated version of `data` with factor labels assigned
+#' @noRd
+assign_fct_labels <- function(fct_var, data, dd) {
+
+  # make a named vector for the factor with its labels
+  vec_names <- dd[dd$var_name == fct_var, "fct_labels"] %>%
     unlist() %>%
-    purrr::map_dbl(~ strsplit(.x, ". ", fixed = TRUE)[[1]][1] %>% as.double()) %>%
+    purrr::map_chr(~ strsplit(.x, ".", fixed = TRUE)[[1]][2]) %>%
+    trimws("left")
+
+  fct_labels <- dd[dd$var_name == fct_var, "fct_labels"] %>%
+    unlist() %>%
+    purrr::map_dbl(~ strsplit(.x, ".", fixed = TRUE)[[1]][1] %>% as.double()) %>%
     rlang::set_names(vec_names)
 
-  out %>%
+  data %>%
     labelled::set_value_labels(
-      racebld = fct_labels
+      !!fct_var := fct_labels
     )
 
-  return(out)
 }
