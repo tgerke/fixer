@@ -44,7 +44,7 @@ fwf_data
 
 Note that variable labels are retained as well:
 
-```{r show-labels, include=FALSE}
+```{r show-labels, echo=TRUE, results='hide'}
 library(gtsummary)
 
 fwf_data %>%

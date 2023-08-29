@@ -51,4 +51,12 @@ fwf_data
 
 Note that variable labels are retained as well:
 
+``` r
+library(gtsummary)
+
+fwf_data %>%
+  select(racebld, smokebld, fastbld) %>%
+  tbl_summary()
+```
+
 <img src="man/figures/table-1.png" width="40%" style="display: block; margin: auto;" />
