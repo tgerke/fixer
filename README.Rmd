@@ -55,4 +55,3 @@ fwf_data %>%
 ```{r print-labels, out.width = "40%", echo = FALSE, fig.align='center'}
 knitr::include_graphics("man/figures/table-1.png")
 ```
-```
