@@ -44,10 +44,15 @@ fwf_data
 
 Note that variable labels are retained as well:
 
-```{r show-labels}
+```{r show-labels, include=FALSE}
 library(gtsummary)
 
 fwf_data %>%
   select(racebld, smokebld, fastbld) %>%
   tbl_summary()
+```
+
+```{r print-labels, out.width = "40%", echo = FALSE, fig.align='center'}
+knitr::include_graphics("man/figures/table-1.png")
+```
 ```
